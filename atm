@@ -112,6 +112,9 @@ public:
 };
 
 // ATM class to handle transactions
+class ATM {
+public:
+    // Modify the performTransaction method in the ATM class
 void performTransaction(BankAccount* account) {
     int choice;
     double amount;
@@ -121,7 +124,7 @@ void performTransaction(BankAccount* account) {
     do {
         cout << "\nATM Menu:\n1. Check Balance\n2. Deposit\n3. Withdraw";
         if (savingsAccount) {
-            cout << "\n4. Add Interest"; 
+            cout << "\n4. Add Interest"; // Only show this option for SavingsAccount
         }
         cout << "\n5. Exit\nChoose an option: ";
         cin >> choice;
@@ -155,6 +158,7 @@ void performTransaction(BankAccount* account) {
         }
     } while (choice != 5);
 }
+};
 
 // Main function to run the ATM system
 int main() {
