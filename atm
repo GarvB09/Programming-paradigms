@@ -1,7 +1,6 @@
 #include <iostream>
 using namespace std;
 
-// Base class for a Person (Account Holder)
 class Person {
 protected:
     int id;
@@ -15,7 +14,6 @@ public:
     }
 };
 
-// Base class for a Bank Account
 class BankAccount {
 protected:
     int accountNumber;
@@ -45,7 +43,6 @@ public:
     }
 };
 
-// Derived class for a Savings Account (Single Inheritance)
 class SavingsAccount : public BankAccount {
 private:
     double interestRate;
@@ -63,7 +60,6 @@ public:
     }
 };
 
-// Base class for Overdraft (used in multiple inheritance)
 class Overdraft {
 protected:
     double overdraftLimit;
@@ -81,7 +77,6 @@ public:
     }
 };
 
-// Derived class for a Current Account (Multiple Inheritance)
 class CurrentAccount : public BankAccount, public Overdraft {
 public:
     CurrentAccount(int accNum, double bal, double limit) : BankAccount(accNum, bal), Overdraft(limit) {}
@@ -101,7 +96,6 @@ public:
     }
 };
 
-// Derived class for a Premium Account (Hierarchical Inheritance)
 class PremiumAccount : public SavingsAccount {
 public:
     PremiumAccount(int accNum, double bal, double rate) : SavingsAccount(accNum, bal, rate) {}
@@ -111,56 +105,53 @@ public:
     }
 };
 
-// ATM class to handle transactions
 class ATM {
 public:
-    // Modify the performTransaction method in the ATM class
-void performTransaction(BankAccount* account) {
-    int choice;
-    double amount;
+    void performTransaction(BankAccount* account) {
+        int choice;
+        double amount;
 
-    SavingsAccount* savingsAccount = dynamic_cast<SavingsAccount*>(account);
+        SavingsAccount* savingsAccount = dynamic_cast<SavingsAccount*>(account);
 
-    do {
-        cout << "\nATM Menu:\n1. Check Balance\n2. Deposit\n3. Withdraw";
-        if (savingsAccount) {
-            cout << "\n4. Add Interest"; // Only show this option for SavingsAccount
-        }
-        cout << "\n5. Exit\nChoose an option: ";
-        cin >> choice;
+        do {
+            cout << "\nATM Menu:\n1. Check Balance\n2. Deposit\n3. Withdraw";
+            if (savingsAccount) {
+                cout << "\n4. Add Interest";
+            }
+            cout << "\n5. Exit\nChoose an option: ";
+            cin >> choice;
 
-        switch (choice) {
-            case 1:
-                account->checkBalance();
-                break;
-            case 2:
-                cout << "Enter amount to deposit: ";
-                cin >> amount;
-                account->deposit(amount);
-                break;
-            case 3:
-                cout << "Enter amount to withdraw: ";
-                cin >> amount;
-                account->withdraw(amount);
-                break;
-            case 4:
-                if (savingsAccount) {
-                    savingsAccount->addInterest();
-                } else {
+            switch (choice) {
+                case 1:
+                    account->checkBalance();
+                    break;
+                case 2:
+                    cout << "Enter amount to deposit: ";
+                    cin >> amount;
+                    account->deposit(amount);
+                    break;
+                case 3:
+                    cout << "Enter amount to withdraw: ";
+                    cin >> amount;
+                    account->withdraw(amount);
+                    break;
+                case 4:
+                    if (savingsAccount) {
+                        savingsAccount->addInterest();
+                    } else {
+                        cout << "Invalid option!" << endl;
+                    }
+                    break;
+                case 5:
+                    cout << "Exiting ATM..." << endl;
+                    break;
+                default:
                     cout << "Invalid option!" << endl;
-                }
-                break;
-            case 5:
-                cout << "Exiting ATM..." << endl;
-                break;
-            default:
-                cout << "Invalid option!" << endl;
-        }
-    } while (choice != 5);
-}
+            }
+        } while (choice != 5);
+    }
 };
 
-// Main function to run the ATM system
 int main() {
     SavingsAccount savings(101, 1000.0, 2.5);
     CurrentAccount current(102, 500.0, 300.0);
