@@ -112,39 +112,49 @@ public:
 };
 
 // ATM class to handle transactions
-class ATM {
-public:
-    void performTransaction(BankAccount* account) {
-        int choice;
-        double amount;
+void performTransaction(BankAccount* account) {
+    int choice;
+    double amount;
 
-        do {
-            cout << "\nATM Menu:\n1. Check Balance\n2. Deposit\n3. Withdraw\n4. Exit\nChoose an option: ";
-            cin >> choice;
+    SavingsAccount* savingsAccount = dynamic_cast<SavingsAccount*>(account);
 
-            switch (choice) {
-                case 1:
-                    account->checkBalance();
-                    break;
-                case 2:
-                    cout << "Enter amount to deposit: ";
-                    cin >> amount;
-                    account->deposit(amount);
-                    break;
-                case 3:
-                    cout << "Enter amount to withdraw: ";
-                    cin >> amount;
-                    account->withdraw(amount);
-                    break;
-                case 4:
-                    cout << "Exiting ATM..." << endl;
-                    break;
-                default:
+    do {
+        cout << "\nATM Menu:\n1. Check Balance\n2. Deposit\n3. Withdraw";
+        if (savingsAccount) {
+            cout << "\n4. Add Interest"; 
+        }
+        cout << "\n5. Exit\nChoose an option: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                account->checkBalance();
+                break;
+            case 2:
+                cout << "Enter amount to deposit: ";
+                cin >> amount;
+                account->deposit(amount);
+                break;
+            case 3:
+                cout << "Enter amount to withdraw: ";
+                cin >> amount;
+                account->withdraw(amount);
+                break;
+            case 4:
+                if (savingsAccount) {
+                    savingsAccount->addInterest();
+                } else {
                     cout << "Invalid option!" << endl;
-            }
-        } while (choice != 4);
-    }
-};
+                }
+                break;
+            case 5:
+                cout << "Exiting ATM..." << endl;
+                break;
+            default:
+                cout << "Invalid option!" << endl;
+        }
+    } while (choice != 5);
+}
 
 // Main function to run the ATM system
 int main() {
@@ -155,18 +165,20 @@ int main() {
     ATM atm;
     int choice;
 
-    // User selects which account they want to operate on
     cout << "Welcome to the ATM System\n1. Savings Account\n2. Current Account\n3. Premium Account\nChoose account type: ";
     cin >> choice;
 
     if (choice == 1) {
         atm.performTransaction(&savings);
-    } else if (choice == 2) {
+    } 
+    else if (choice == 2) {
         atm.performTransaction(&current);
-    } else if (choice == 3) {
+    } 
+    else if (choice == 3) {
         atm.performTransaction(&premium);
-        premium.premiumServices(); // Premium account offers extra services
-    } else {
+        premium.premiumServices(); 
+    } 
+    else {
         cout << "Invalid account type!" << endl;
     }
 
