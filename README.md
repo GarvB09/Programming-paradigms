@@ -1,8 +1,11 @@
 ATM System Program
+
 This is a simple ATM simulation program written in C++. It allows users to interact with different types of bank accounts, such as savings, current, and premium accounts. The program supports basic banking operations such as checking balance, depositing money, withdrawing money, and adding interest to savings accounts. Premium accounts also have premium services.
 
-Features
+Features:
 Bank Account Management: Includes Savings, Current, and Premium accounts.
+
+
 Operations:
 Check balance
 Deposit money
@@ -10,6 +13,8 @@ Withdraw money (with overdraft for current accounts)
 Add interest to Savings accounts
 Premium Account Services: Premium accounts have access to additional services.
 ATM Simulation: Users can interact with accounts via an ATM interface, choose operations, and perform transactions.
+
+
 Classes
 Person: Represents a person with an ID and age.
 BankAccount: Base class for bank accounts with methods for checking balance, depositing, and withdrawing money.
@@ -19,6 +24,9 @@ CurrentAccount: Inherits from BankAccount and Overdraft, allows withdrawal with 
 PremiumAccount: Inherits from SavingsAccount, adds premium services.
 ATM: Handles the ATM transactions for the user, displaying the menu, and performing operations based on user input.
 Compilation and Execution
+
+
+
 Requirements:
 A C++ compiler (e.g., GCC or MSVC).
 C++11 or later for features like nullptr, override, etc.
@@ -45,6 +53,8 @@ bash
 Copy code
 atm_system.exe
 Program Workflow
+
+
 Login: The user is prompted to enter an account number.
 Account Selection: The user selects the type of account (Savings, Current, or Premium).
 ATM Operations:
