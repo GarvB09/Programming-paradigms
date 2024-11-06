@@ -8,32 +8,48 @@ Bank Account Management: Includes Savings, Current, and Premium accounts.
 
 Operations:
 Check balance
+
 Deposit money
+
 Withdraw money (with overdraft for current accounts)
+
 Add interest to Savings accounts
+
 Premium Account Services: Premium accounts have access to additional services.
+
 ATM Simulation: Users can interact with accounts via an ATM interface, choose operations, and perform transactions.
+
 
 
 Classes
 Person: Represents a person with an ID and age.
 BankAccount: Base class for bank accounts with methods for checking balance, depositing, and withdrawing money.
+
 SavingsAccount: Inherits from BankAccount, adds interest rate functionality, and allows adding interest.
+
 Overdraft: Provides functionality for overdraft protection, used by current accounts.
+
 CurrentAccount: Inherits from BankAccount and Overdraft, allows withdrawal with overdraft protection.
+
 PremiumAccount: Inherits from SavingsAccount, adds premium services.
+
 ATM: Handles the ATM transactions for the user, displaying the menu, and performing operations based on user input.
+
+
 Compilation and Execution
-
-
-
 Requirements:
 A C++ compiler (e.g., GCC or MSVC).
+
 C++11 or later for features like nullptr, override, etc.
+
 Steps to compile and run:
+
 Save the source code in a .cpp file (e.g., atm_system.cpp).
+
 Open a terminal or command prompt.
+
 Navigate to the directory where the .cpp file is saved.
+
 Compile the program using your preferred C++ compiler:
 Using g++ (GCC):
 bash
