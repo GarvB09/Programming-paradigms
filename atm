@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 using namespace std;
 
 class Person {
@@ -15,26 +16,28 @@ public:
 };
 
 class BankAccount {
-protected:
-    int accountNumber;
-    double balance;
-
 public:
-    BankAccount(int accNum, double bal = 0) : accountNumber(accNum), balance(bal) {}
+    int accountNumber;
+    float balance;
+
+    BankAccount(int accNum, float bal = 0) : accountNumber(accNum), balance(bal) {}
 
     virtual void checkBalance() {
-        cout << "Account Number: " << accountNumber << "\nBalance: $" << balance << endl;
+        cout << "Account Number: " << accountNumber << "\nBalance: $" 
+             << fixed << setprecision(3) << balance << endl;
     }
 
-    virtual void deposit(double amount) {
+    virtual void deposit(float amount) {
         balance += amount;
-        cout << "$" << amount << " deposited. New balance: $" << balance << endl;
+        cout << "$" << fixed << setprecision(3) << amount << " deposited. New balance: $" 
+             << fixed << setprecision(3) << balance << endl;
     }
 
-    virtual bool withdraw(double amount) {
+    virtual bool withdraw(float amount) {
         if (balance >= amount) {
             balance -= amount;
-            cout << "$" << amount << " withdrawn. New balance: $" << balance << endl;
+            cout << "$" << fixed << setprecision(3) << amount << " withdrawn. New balance: $" 
+                 << fixed << setprecision(3) << balance << endl;
             return true;
         } else {
             cout << "Insufficient funds!" << endl;
@@ -45,29 +48,30 @@ public:
 
 class SavingsAccount : public BankAccount {
 private:
-    double interestRate;
+    float interestRate;
 
 public:
-    SavingsAccount(int accNum, double bal, double rate) : BankAccount(accNum, bal), interestRate(rate) {}
+    SavingsAccount(int accNum, float bal, float rate) : BankAccount(accNum, bal), interestRate(rate) {}
 
     void addInterest() {
         balance += (balance * interestRate / 100);
-        cout << "Interest added. New balance: $" << balance << endl;
+        cout << "Interest added. New balance: $" << fixed << setprecision(3) << balance << endl;
     }
 
     void checkBalance() override {
-        cout << "Savings Account Number: " << accountNumber << "\nBalance: $" << balance << "\nInterest Rate: " << interestRate << "%" << endl;
+        cout << "Savings Account Number: " << accountNumber << "\nBalance: $" << fixed 
+             << setprecision(3) << balance << "\nInterest Rate: " << interestRate << "%" << endl;
     }
 };
 
 class Overdraft {
 protected:
-    double overdraftLimit;
+    float overdraftLimit;
 
 public:
-    Overdraft(double limit) : overdraftLimit(limit) {}
+    Overdraft(float limit) : overdraftLimit(limit) {}
 
-    bool checkOverdraft(double amount, double& balance) {
+    bool checkOverdraft(float amount, float& balance) {
         if (balance + overdraftLimit >= amount) {
             balance -= amount;
             return true;
@@ -79,11 +83,12 @@ public:
 
 class CurrentAccount : public BankAccount, public Overdraft {
 public:
-    CurrentAccount(int accNum, double bal, double limit) : BankAccount(accNum, bal), Overdraft(limit) {}
+    CurrentAccount(int accNum, float bal, float limit) : BankAccount(accNum, bal), Overdraft(limit) {}
 
-    bool withdraw(double amount) override {
+    bool withdraw(float amount) override {
         if (checkOverdraft(amount, balance)) {
-            cout << "$" << amount << " withdrawn using overdraft. New balance: $" << balance << endl;
+            cout << "$" << fixed << setprecision(3) << amount << " withdrawn using overdraft. New balance: $" 
+                 << fixed << setprecision(3) << balance << endl;
             return true;
         } else {
             cout << "Overdraft limit exceeded!" << endl;
@@ -92,13 +97,14 @@ public:
     }
 
     void checkBalance() override {
-        cout << "Current Account Number: " << accountNumber << "\nBalance: $" << balance << "\nOverdraft Limit: $" << overdraftLimit << endl;
+        cout << "Current Account Number: " << accountNumber << "\nBalance: $" << fixed 
+             << setprecision(3) << balance << "\nOverdraft Limit: $" << overdraftLimit << endl;
     }
 };
 
 class PremiumAccount : public SavingsAccount {
 public:
-    PremiumAccount(int accNum, double bal, double rate) : SavingsAccount(accNum, bal, rate) {}
+    PremiumAccount(int accNum, float bal, float rate) : SavingsAccount(accNum, bal, rate) {}
 
     void premiumServices() {
         cout << "Premium services are available for account number: " << accountNumber << endl;
@@ -109,7 +115,7 @@ class ATM {
 public:
     void performTransaction(BankAccount* account) {
         int choice;
-        double amount;
+        float amount;
 
         SavingsAccount* savingsAccount = dynamic_cast<SavingsAccount*>(account);
 
@@ -118,7 +124,7 @@ public:
             if (savingsAccount) {
                 cout << "\n4. Add Interest";
             }
-            cout << "\n5. Exit\nChoose an option: ";
+            cout << "\n5. Exit\n6. Return to Main Menu\nChoose an option: ";
             cin >> choice;
 
             switch (choice) {
@@ -145,6 +151,10 @@ public:
                 case 5:
                     cout << "Exiting ATM..." << endl;
                     break;
+                case 6:
+                    cout << "Returning to Main Menu..." << endl;
+                    return;
+                    break;
                 default:
                     cout << "Invalid option!" << endl;
             }
@@ -152,29 +162,95 @@ public:
     }
 };
 
+void showMainMenu() {
+    cout << "Welcome to the ATM System\n";
+    cout << "Select account type:\n";
+    cout << "1. Savings Account\n2. Current Account\n3. Premium Account\n";
+    cout << "Choose account type: ";
+}
+
 int main() {
-    SavingsAccount savings(101, 1000.0, 2.5);
-    CurrentAccount current(102, 500.0, 300.0);
-    PremiumAccount premium(103, 2000.0, 3.0);
+    SavingsAccount savings1(101, 1000.0f, 2.5f);
+    SavingsAccount savings2(102, 1500.0f, 3.0f);
+
+    CurrentAccount current1(201, 500.0f, 300.0f);
+    CurrentAccount current2(202, 750.0f, 500.0f);
+    
+    PremiumAccount premium1(301, 2000.0f, 3.5f);
+    PremiumAccount premium2(302, 3000.0f, 4.0f);
 
     ATM atm;
-    int choice;
+    int accountChoice;
+    int accountNumber;
 
-    cout << "Welcome to the ATM System\n1. Savings Account\n2. Current Account\n3. Premium Account\nChoose account type: ";
-    cin >> choice;
+    while (true) {
+        cout << "Enter account number: ";
+        cin >> accountNumber;
 
-    if (choice == 1) {
-        atm.performTransaction(&savings);
-    } 
-    else if (choice == 2) {
-        atm.performTransaction(&current);
-    } 
-    else if (choice == 3) {
-        atm.performTransaction(&premium);
-        premium.premiumServices(); 
-    } 
-    else {
-        cout << "Invalid account type!" << endl;
+        showMainMenu();
+        cin >> accountChoice;
+
+        BankAccount* account = nullptr;
+
+        switch (accountChoice) {
+            case 1:
+                if (accountNumber == savings1.accountNumber) {
+                    account = &savings1;
+                } else if (accountNumber == savings2.accountNumber) {
+                    account = &savings2;
+                } else {
+                    cout << "Account number does not match any Savings Account!" << endl;
+                    return 1;
+                }
+                break;
+            case 2:
+                if (accountNumber == current1.accountNumber) {
+                    account = &current1;
+                } else if (accountNumber == current2.accountNumber) {
+                    account = &current2;
+                } else {
+                    cout << "Account number does not match any Current Account!" << endl;
+                    return 1;
+                }
+                break;
+            case 3:
+                if (accountNumber == premium1.accountNumber) {
+                    account = &premium1;
+                } else if (accountNumber == premium2.accountNumber) {
+                    account = &premium2;
+                } else {
+                    cout << "Account number does not match any Premium Account!" << endl;
+                    return 1;
+                }
+                break;
+            default:
+                cout << "Invalid account type!" << endl;
+                return 1;
+        }
+
+        atm.performTransaction(account);
+
+        if (accountChoice == 3) {
+            PremiumAccount* premiumAccount = dynamic_cast<PremiumAccount*>(account);
+            if (premiumAccount) {
+                premiumAccount->premiumServices();
+            }
+        }
+
+        char restart;
+        cout << "\nDo you want to perform another transaction? (Y/N): ";
+        cin >> restart;
+
+        if (restart == 'N' || restart == 'n') {
+            cout << "Thank you for using the ATM System. Goodbye!" << endl;
+            break;
+        } else if (restart == 'Y' || restart == 'y') {
+            cout << "Returning to main menu..." << endl;
+            continue;
+        } else {
+            cout << "Invalid input, returning to main menu..." << endl;
+            continue;
+        }
     }
 
     return 0;
